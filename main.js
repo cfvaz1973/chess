@@ -9,7 +9,7 @@ setupPieces();
 
 // This function sets up the event listeners and IDs for the squares on the chess board.
 // It loops through an array of boardSquares and for each square, it adds an event listener for the dragover and drop events,
-// calling the allowDrop and deop functions respectively when those events are triggered
+// calling the allowDrop and drop functions respectively when those events are triggered
 // The function also calculates the row and column for each square and assigns an ID to the square in the format
 // column + row, where column is a letter from 'a' to 'h' and row is a number from 1 to 8.
 function setupBoardSquares() {
@@ -46,12 +46,12 @@ function drag(ev) {
     const pieceColor = piece.getAttribute("color");
     if ((isWhiteTurn && pieceColor == "white") || (!isWhiteTurn && pieceColor == "black"))
         ev.dataTransfer.setData("text", piece.id);
-
 }
 
 function drop(ev) {
     ev.preventDefault();
     let data = ev.dataTransfer.getData("text");
+    if (data === "") return;
     const piece = document.getElementById(data);
     const destinationSquare = ev.currentTarget;
     let destinationSquareId = destinationSquare.id;
@@ -61,7 +61,7 @@ function drop(ev) {
         return;
     }
     if (isSquareOccupied(destinationSquare) !== "blank") {
-        while(destinationSquare.firstChild){
+        while (destinationSquare.firstChild) {
             destinationSquare.removeChild(destinationSquare.firstChild);
         }
         destinationSquare.appendChild(piece);
